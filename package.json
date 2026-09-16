@@ -12,19 +12,40 @@
     "test:e2e": "playwright test",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx scripts/db-migrate.ts",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "extract:sources": "tsx scripts/extract-sources.ts",
+    "index:sources": "tsx scripts/index-sources.ts",
+    "generate:lessons": "tsx scripts/generate-lessons.ts",
+    "generate:questions": "tsx scripts/generate-questions.ts",
+    "qa:questions": "tsx scripts/qa-questions.ts",
+    "jobs": "tsx scripts/process-jobs.ts",
+    "db:push": "tsx scripts/db-sync.ts push",
+    "db:pull": "tsx scripts/db-sync.ts pull",
+    "deploy": "bash scripts/deploy.sh"
   },
   "dependencies": {
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/inter-tight": "^5.3.0",
+    "@huggingface/transformers": "^4.3.0",
     "@libsql/client": "^0.18.0",
+    "@serwist/next": "^9.5.12",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "iron-session": "^9.0.1",
     "lucide-react": "^1.46.0",
     "next": "15.5.25",
+    "pdf-parse": "^2.4.5",
+    "radix-ui": "^1.6.7",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-markdown": "^10.1.0",
+    "recharts": "^3.10.1",
+    "remark-gfm": "^4.0.1",
+    "serwist": "^9.5.12",
     "tailwind-merge": "^3.7.0",
+    "ts-fsrs": "^5.4.2",
     "zod": "^4.6.5"
   },
   "devDependencies": {
@@ -41,11 +62,5 @@
     "tsx": "^4.23.13",
     "typescript": "^5",
     "vitest": "^5.0.1"
-  },
-  "allowScripts": {
-    "esbuild@0.18.20": true,
-    "esbuild@0.25.12": true,
-    "esbuild@0.28.2": true,
-    "unrs-resolver@1.12.2": true
   }
 }

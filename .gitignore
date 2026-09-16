@@ -33,3 +33,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .vercel
+
+# generated service worker
+/public/sw.js
+/public/sw.js.map
+/public/swe-worker*.js

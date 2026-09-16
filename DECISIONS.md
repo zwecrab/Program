@@ -35,3 +35,24 @@ Choices made where the build prompt left room. Each picks the cheaper / simpler 
     Exhibit-keyed types must have zero rows in `options` and a non-empty `explanation_md`. In every type, a wrong choice needs a `distractor_family` and a `rationale`; a correct choice needs a `rationale` and no family. The manual entry form only offers the four option-based types; the other four arrive with the generator.
 
 14. **Which brief is canonical.** `prompt.md` and `FABLE_BUILD_PROMPT.md` were byte-identical apart from CRLF line endings; `FABLE_BUILD_PROMPT.md` is kept because `PHASE2_BRIEF.md` refers to it by name. `PHASE2_BRIEF.md` supersedes its §5–§7 and adds §17–§20.
+
+## Phase 2 (retrieval, generation, exam-agnostic schema)
+
+15. **Schema §20 done first, on empty tables.** `eco_tasks` → `syllabus_items` (+`exam_id`, `parent_id`, `code`), `exams` table, `exam_id` on every content/activity table, `citations_json` + `support` on lessons and questions, `qa_json` on questions. Migration `0001_exam_agnostic.sql` is hand-composed (drizzle-kit cannot express the FTS5 table, the vector index or the `eco_tasks` view) and preserves the baseline session and any ticked days. Domain columns are plain text; PMP's vocabulary lives in `config/exams/pmp.ts`.
+16. **CSV columns.** I never saw the Excel tracker, so `/api/export?format=csv` emits: Date, Session, Kind, Domain, ECO Task, Task Title, Question ID, Item Type, Difficulty, Style, Correct, Distractor Family, Seconds, Confidence, Pretest — plus one summary line for the 16 Sep baseline. Rename/reorder in `src/lib/analytics.ts › attemptsCsv` to match the workbook.
+17. **Agile Practice Guide / Change guide page ranges** are not in the brief. `source-map.json` extracts the whole PDF and keeps pages whose top matches "Chapter 2–5" / "Chapter 6"; if the heuristic finds nothing it keeps everything rather than emit an empty file. Replace `pages: null` with a verified range when you have it.
+18. **Chunk → task tagging** (`sourceToSyllabus` in the config) is a hand map from source slice to the ECO tasks it mainly serves. It only boosts ranking (×1.5), never filters, so cross-domain facts still surface.
+19. **Support score** = retrieval similarity + chunk agreement + a strict yes/partly/no grounding call; rendered as *Well sourced / Partly sourced / Unsourced*, never a percentage. A lesson section or question with `low` support is flagged, not hidden; a 25-word run against any indexed chunk forces `low`.
+20. **QA hard rules override the reviewer**: a second defensible answer or a task mismatch is always `reject`; an unstated-fact dependency, stem leak, verb inconsistency, family mislabel or ungrounded claim downgrades `pass` to `revise`. One revision, then quarantine. Correct-option positions are balanced across each batch before insert; batch-level position (>35%) and longest-option (>30%) bias is reported.
+21. **Generation runs on your machine**, not in the browser and not in a hosted function: the admin page *queues* runs (`generation_runs.status = queued`) and `npm run jobs` performs them. Reasons: PMI text must not leave the laptop, and generation of 120 questions takes minutes.
+22. **shadcn/ui via local authoring.** The shadcn registry is not reachable from every build environment, so `src/components/ui/index.tsx` holds the same components (cva variants, Radix primitives, `cn`) written locally. Fonts are self-hosted from `@fontsource-variable` (Fraunces, Inter Tight) rather than Google Fonts, for the same reason.
+23. **Route groups**: `(app)` = dashboards with navigation; `(focus)` = practice sessions and the exam, with no chrome competing for attention.
+24. **`db:push` excludes `source_chunks`.** The deployed app serves the bank, lessons and analytics; retrieval-backed runtime features (ask, explain) run only where the chunks are — your laptop. Vercel gets `EMBEDDINGS=fake` so nothing tries to load the model there.
+
+## Phase 3 / 4
+
+25. **Exam clock** is server-side (`deadline_at` in `sessions.state_json`); every mutation checks it and auto-submits on expiry. Breaks stop the clock by pushing the deadline out by the break actually used (≤10 min). Leaving the case block records those attempts immediately and sets `case_locked`; later `saveAnswer` calls for case items are refused.
+26. **Pretest items**: 10 random non-case questions per paper are flagged in state and on their `attempts.pretest`; every score in the app excludes them, mirroring PMI.
+27. **Short papers**: when the bank has fewer than 180 active questions the mock uses what exists and says so; percentages still report.
+28. **FSRS** via `ts-fsrs` with short-term steps and fuzz on; card state is the five FSRS fields stored on `flashcards`.
+29. **i18n**: UI strings in `src/i18n/{en,my}.json`; PMI terms stay English in both. Lesson bodies carry a Burmese summary section from the generator.

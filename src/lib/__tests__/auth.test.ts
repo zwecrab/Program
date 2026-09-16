@@ -35,7 +35,7 @@ describe("env", () => {
 
 describe("question schema", () => {
   const base = {
-    eco_task_id: 23,
+    syllabus_item_id: 23,
     domain: "business_environment",
     delivery_approach: "predictive",
     item_type: "single",

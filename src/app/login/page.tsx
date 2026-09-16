@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { Suspense, useState, type FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense } from "react";
 import { Button, Card, Input, Label } from "@/components/ui";
 
 function LoginForm() {
@@ -33,33 +32,31 @@ function LoginForm() {
   }
 
   return (
-    <Card>
-      <h1 className="mb-1 text-xl font-semibold">PMP Trainer</h1>
-      <p className="mb-4 text-sm text-muted">Private study app. Enter your passphrase.</p>
-      <form onSubmit={onSubmit} className="space-y-3">
-        <div>
-          <Label htmlFor="passphrase">Passphrase</Label>
-          <Input
-            id="passphrase"
-            name="passphrase"
-            type="password"
-            autoComplete="current-password"
-            autoFocus
-            value={passphrase}
-            onChange={(e) => setPassphrase(e.target.value)}
-            required
-          />
-        </div>
-        {error ? (
-          <p role="alert" className="text-sm text-danger">
-            {error}
-          </p>
-        ) : null}
-        <Button type="submit" className="w-full" disabled={busy}>
-          {busy ? "Signing in…" : "Sign in"}
-        </Button>
-      </form>
-    </Card>
+    <main className="mx-auto max-w-sm px-4 pt-20">
+      <p className="text-xs font-medium uppercase tracking-[0.08em] text-fg-muted">Private study app</p>
+      <h1 className="mb-6 text-3xl">PMP Trainer</h1>
+      <Card className="p-5">
+        <form onSubmit={onSubmit} className="space-y-4">
+          <div>
+            <Label htmlFor="passphrase">Passphrase</Label>
+            <Input
+              id="passphrase"
+              name="passphrase"
+              type="password"
+              autoComplete="current-password"
+              autoFocus
+              value={passphrase}
+              onChange={(e) => setPassphrase(e.target.value)}
+              required
+            />
+          </div>
+          {error ? <p className="text-sm text-incorrect">{error}</p> : null}
+          <Button type="submit" size="lg" className="w-full" disabled={busy}>
+            {busy ? "Signing in…" : "Sign in"}
+          </Button>
+        </form>
+      </Card>
+    </main>
   );
 }
 

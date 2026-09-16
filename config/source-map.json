@@ -1,0 +1,23 @@
+{
+  "$comment": "PDF page ranges (not printed page numbers). Verified map from the build prompt §4. `pages: null` means the whole file. Files are resolved relative to SOURCE_DIR.",
+  "sources": [
+    { "slug": "principles", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — The Standard", "section": "Standard §3 — The six principles", "pages": [58, 79] },
+    { "slug": "lifecycles", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — The Standard", "section": "Standard §4 — Life cycles, focus areas", "pages": [80, 96] },
+    { "slug": "pd-governance", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Guide", "section": "Guide §2.1 Governance (9 processes)", "pages": [115, 139] },
+    { "slug": "pd-scope", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Guide", "section": "Guide §2.2 Scope (6 processes)", "pages": [140, 151] },
+    { "slug": "pd-schedule", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Guide", "section": "Guide §2.3 Schedule (3 processes)", "pages": [152, 162] },
+    { "slug": "pd-finance", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Guide", "section": "Guide §2.4 Finance (4 processes)", "pages": [163, 171] },
+    { "slug": "pd-stakeholders", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Guide", "section": "Guide §2.5 Stakeholders (7 processes)", "pages": [172, 183] },
+    { "slug": "pd-resources", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Guide", "section": "Guide §2.6 Resources (5 processes)", "pages": [184, 196] },
+    { "slug": "pd-risk", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Guide", "section": "Guide §2.7 Risk (6 processes)", "pages": [197, 207] },
+    { "slug": "tailoring", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Guide", "section": "Guide §3 Tailoring", "pages": [208, 217] },
+    { "slug": "inputs-outputs", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Guide", "section": "Guide §4 Inputs and Outputs", "pages": [218, 249] },
+    { "slug": "tools", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Guide", "section": "Guide §5 Tools and Techniques", "pages": [250, 321] },
+    { "slug": "pmos", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Appendices", "section": "Appendix X2 — PMOs", "pages": [338, 341] },
+    { "slug": "ai", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Appendices", "section": "Appendix X3 — Artificial Intelligence", "pages": [342, 349] },
+    { "slug": "procurement", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Appendices", "section": "Appendix X4 — Procurement", "pages": [350, 359] },
+    { "slug": "evolution", "file": "pmbokguide_eighthed_eng.pdf", "book": "PMBOK Guide 8th ed. — Appendices", "section": "Appendix X5 — What changed", "pages": [360, 365] },
+    { "slug": "agile-guide", "file": "agile_pg_second_ed_eng.pdf", "book": "Agile Practice Guide 2nd ed.", "section": "Chapters 2–5 — adaptive and hybrid", "pages": null, "chapters": ["2", "3", "4", "5"] },
+    { "slug": "change-guide", "file": "ManagingChangeInOrganizations_A_Practice_Guide.pdf", "book": "Managing Change in Organizations: A Practice Guide", "section": "Chapter 6 — organisational change", "pages": null, "chapters": ["6"] }
+  ]
+}

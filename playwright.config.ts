@@ -24,6 +24,8 @@ export default defineConfig({
       APP_PASSPHRASE: "e2e-passphrase",
       SESSION_SECRET: "e2e-secret-e2e-secret-e2e-secret-e2e-secret",
       OPENROUTER_API_KEY: "e2e-placeholder",
+      LLM_TRANSPORT: "mock",
+      EMBEDDINGS: "fake",
     },
   },
 });

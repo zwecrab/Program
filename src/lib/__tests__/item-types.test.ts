@@ -3,7 +3,7 @@ import { ITEM_TYPES } from "@/db/schema";
 import { questionInputSchema } from "@/lib/question-schema";
 
 const common = {
-  eco_task_id: 23,
+  syllabus_item_id: 23,
   domain: "business_environment",
   delivery_approach: "hybrid",
   difficulty: 2,

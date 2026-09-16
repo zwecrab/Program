@@ -10,5 +10,8 @@ export async function register() {
     assertRequiredEnv();
     const { migrateAndSeed } = await import("./db/migrate");
     await migrateAndSeed();
+    // Build prompt §2: validate the model slug; a missing slug lists alternatives and exits.
+    const { validateModel } = await import("./lib/llm");
+    await validateModel();
   }
 }

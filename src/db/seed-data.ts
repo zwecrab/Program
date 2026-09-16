@@ -1,87 +1,26 @@
 /**
- * Reference data seeded on first migration.
- * Source: build prompt §3 and §14 (2026 ECO, 47-day roadmap).
+ * Reference data seeded on first migration. Everything exam-specific comes
+ * from config/exams/pmp.ts; this file only shapes it into rows.
  */
-import type { Domain } from "./schema";
+import { PMP, type PmpDomain } from "../../config/exams/pmp";
 
-export const DOMAIN_WEIGHTS: Record<Domain, number> = {
-  people: 33,
-  process: 41,
-  business_environment: 26,
-};
-
-export const DOMAIN_LABELS: Record<Domain, string> = {
-  people: "People",
-  process: "Process",
-  business_environment: "Business Environment",
-};
+export type Domain = PmpDomain;
+export const DOMAIN_WEIGHTS = PMP.domainWeights;
+export const DOMAIN_LABELS: Record<string, string> = PMP.domainLabels;
 
 export interface EcoTaskSeed {
   id: number;
   domain: Domain;
+  code: string;
   taskNumber: number;
   title: string;
   planDay: number;
 }
 
-const people: Array<[number, string]> = [
-  [20, "Develop a common vision"],
-  [21, "Manage conflicts"],
-  [22, "Lead the project team"],
-  [23, "Engage stakeholders"],
-  [24, "Align stakeholder expectations"],
-  [25, "Manage stakeholder expectations"],
-  [26, "Help ensure knowledge transfer"],
-  [26, "Plan and manage communication"],
-];
-
-const process: Array<[number, string]> = [
-  [7, "Develop an integrated project management plan and plan delivery"],
-  [8, "Develop and manage project scope"],
-  [9, "Help ensure value-based delivery"],
-  [10, "Plan and manage resources"],
-  [11, "Plan and manage procurement"],
-  [12, "Plan and manage finance"],
-  [14, "Plan and optimize quality of products/deliverables"],
-  [15, "Plan and manage schedule"],
-  [16, "Evaluate project status"],
-  [17, "Manage project closure"],
-];
-
-const businessEnvironment: Array<[number, string]> = [
-  [29, "Define and establish project governance"],
-  [30, "Plan and manage project compliance"],
-  [31, "Manage and control changes"],
-  [32, "Remove impediments and manage issues"],
-  [33, "Plan and manage risk"],
-  [34, "Continuous improvement"],
-  [35, "Support organizational change"],
-  [36, "Evaluate external business environment changes"],
-];
-
-function build(domain: Domain, rows: Array<[number, string]>, startId: number): EcoTaskSeed[] {
-  return rows.map(([planDay, title], i) => ({
-    id: startId + i,
-    domain,
-    taskNumber: i + 1,
-    title,
-    planDay,
-  }));
-}
-
 /** IDs: 1–8 People, 9–18 Process, 19–26 Business Environment. */
-export const ECO_TASKS: EcoTaskSeed[] = [
-  ...build("people", people, 1),
-  ...build("process", process, 9),
-  ...build("business_environment", businessEnvironment, 19),
-];
+export const ECO_TASKS: EcoTaskSeed[] = PMP.syllabus;
 
-/**
- * `eco_tasks.weight_pct` carries the domain weight verbatim (33 / 41 / 26).
- * Dividing it across tasks produced rounding drift (8 × 4.13 = 33.04), and
- * PMI publishes weights per domain, not per task. Analytics must aggregate
- * by domain, never sum this column across tasks.
- */
+/** `syllabus_items.weight_pct` carries the domain weight verbatim (DECISIONS #12). */
 export function taskWeightPct(domain: Domain): number {
   return DOMAIN_WEIGHTS[domain];
 }
@@ -90,9 +29,9 @@ export function taskWeightPct(domain: Domain): number {
 // 47-day roadmap. Day 1 = 2026-09-15, day 47 = 2026-10-31 (exam day).
 // ---------------------------------------------------------------------------
 
-export const PLAN_START_DATE = "2026-09-15";
-export const EXAM_DATE = "2026-10-31";
-export const PLAN_DAYS = 47;
+export const PLAN_START_DATE = PMP.plan.startDate;
+export const EXAM_DATE = PMP.examDate;
+export const PLAN_DAYS = PMP.plan.days;
 
 export interface StudyDaySeed {
   day: number;
@@ -179,8 +118,9 @@ export const BASELINE_SESSION = {
 
 export const DEFAULT_SETTINGS: Record<string, string> = {
   locale: "en",
+  theme: "system",
   domain_weights_json: JSON.stringify(DOMAIN_WEIGHTS),
   monthly_llm_cap_usd: "5",
   exam_date: EXAM_DATE,
-  seed_version: "1",
+  seed_version: "2",
 };

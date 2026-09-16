@@ -2,7 +2,6 @@ import { z } from "zod";
 import {
   DELIVERY_APPROACHES,
   DISTRACTOR_FAMILIES,
-  DOMAINS,
   ITEM_TYPES,
   OPTION_BASED_ITEM_TYPES,
   STYLES,
@@ -128,8 +127,8 @@ export type Exhibit = z.infer<typeof exhibitSchema>;
 
 export const questionInputSchema = z
   .object({
-    eco_task_id: z.number().int().min(1).max(26),
-    domain: z.enum(DOMAINS),
+    syllabus_item_id: z.number().int().min(1).max(26),
+    domain: z.string().trim().min(1),
     delivery_approach: z.enum(DELIVERY_APPROACHES),
     item_type: z.enum(ITEM_TYPES),
     difficulty: z.union([z.literal(1), z.literal(2), z.literal(3)]),

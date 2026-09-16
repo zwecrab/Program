@@ -24,3 +24,21 @@ test("login → today → plan", async ({ page }) => {
   await page.getByRole("button", { name: "Mark day 1 done" }).click();
   await expect(page.getByText(/1\/47 days done/)).toBeVisible();
 });
+
+test("empty-bank screens degrade gracefully and the design page renders both themes", async ({ page }) => {
+  await page.goto("/login");
+  await page.getByLabel("Passphrase").fill("e2e-passphrase");
+  await page.getByRole("button", { name: "Sign in" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await page.goto("/practice");
+  await expect(page.getByText("The bank is empty")).toBeVisible();
+  await page.goto("/exam");
+  await expect(page.getByRole("button", { name: "Start a full mock" })).toBeDisabled();
+  await page.goto("/analytics");
+  await expect(page.getByText("Readiness gates")).toBeVisible();
+  await expect(page.getByText(/Cold baseline|cold baseline/)).toBeVisible();
+  await page.goto("/design");
+  await expect(page.locator('[data-theme="dark"]')).toBeVisible();
+  await page.goto("/admin");
+  await expect(page.getByText("Bank, generation and spend")).toBeVisible();
+});

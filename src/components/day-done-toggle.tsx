@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { Check } from "lucide-react";
 import { toggleStudyDay } from "@/app/actions";
 import { cn } from "@/lib/utils";
 
@@ -14,13 +15,13 @@ export function DayDoneToggle({ day, done, compact = false }: { day: number; don
       disabled={pending}
       onClick={() => start(() => toggleStudyDay(day, !done))}
       className={cn(
-        "flex shrink-0 items-center justify-center rounded-full border transition",
-        compact ? "h-7 w-7" : "h-10 w-10",
-        done ? "border-success bg-success text-white" : "border-border bg-card text-muted hover:border-primary",
+        "flex shrink-0 items-center justify-center rounded-full border transition-colors",
+        compact ? "mt-0.5 h-6 w-6" : "h-10 w-10",
+        done ? "border-correct bg-correct text-white" : "border-border-strong bg-surface text-fg-faint hover:border-accent",
         pending && "opacity-50",
       )}
     >
-      {done ? "✓" : ""}
+      {done ? <Check size={compact ? 14 : 18} /> : null}
     </button>
   );
 }
