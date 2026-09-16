@@ -76,10 +76,14 @@ export const ECO_TASKS: EcoTaskSeed[] = [
   ...build("business_environment", businessEnvironment, 19),
 ];
 
-/** Each task's share of the exam = domain weight / tasks in that domain. */
+/**
+ * `eco_tasks.weight_pct` carries the domain weight verbatim (33 / 41 / 26).
+ * Dividing it across tasks produced rounding drift (8 × 4.13 = 33.04), and
+ * PMI publishes weights per domain, not per task. Analytics must aggregate
+ * by domain, never sum this column across tasks.
+ */
 export function taskWeightPct(domain: Domain): number {
-  const n = ECO_TASKS.filter((t) => t.domain === domain).length;
-  return Math.round((DOMAIN_WEIGHTS[domain] / n) * 100) / 100;
+  return DOMAIN_WEIGHTS[domain];
 }
 
 // ---------------------------------------------------------------------------
@@ -175,6 +179,7 @@ export const BASELINE_SESSION = {
 
 export const DEFAULT_SETTINGS: Record<string, string> = {
   locale: "en",
+  domain_weights_json: JSON.stringify(DOMAIN_WEIGHTS),
   monthly_llm_cap_usd: "5",
   exam_date: EXAM_DATE,
   seed_version: "1",

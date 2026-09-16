@@ -67,7 +67,7 @@ export default async function TodayPage() {
                     {t.title}
                   </Link>
                   <p className="text-xs text-muted">
-                    {DOMAIN_LABELS[t.domain]} · task {t.taskNumber} · {t.weightPct}% of exam
+                    {DOMAIN_LABELS[t.domain]} · task {t.taskNumber} · domain is {t.weightPct}% of exam
                   </p>
                 </div>
                 {t.studied ? (

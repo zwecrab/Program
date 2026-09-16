@@ -15,3 +15,23 @@ Choices made where the build prompt left room. Each picks the cheaper / simpler 
 9. **Playwright** uses the Chromium "Pixel 5" profile (WebKit is not available everywhere). `PW_CHROMIUM_PATH` lets you point at a system Chromium.
 10. **OpenRouter model validation at startup** (§2) is deferred to Phase 2, when the LLM client exists; Phase 1 has no LLM code by design.
 11. **`next-pwa`** deferred to Phase 4; Phase 1 ships the manifest and mobile layout only.
+
+## Phase 1 hotfix (16 Sep 2026)
+
+12. **`eco_tasks.weight_pct` is the domain weight (33 / 41 / 26), not a per-task share.** Dividing produced rounding drift (People 8 × 4.13 = 33.04). PMI publishes weights per domain, so the column now carries the domain figure verbatim; `settings.domain_weights_json` holds the same map. Analytics aggregate by domain and must never sum `weight_pct` across tasks. The seed repairs existing rows on boot. Phase 2 §20 moves this into `exams.domain_weights_json`.
+
+13. **Item types and answer shape.** `ITEM_TYPES` is the exam's eight: `single`, `multi`, `matching`, `enhanced_matching`, `point_and_click`, `pull_down_list`, `graphic`, `case`. "ordering" and "calculation" were removed — numeric items are `single`/`multi` tagged `style = "calculation"`. Answer keys live in one of two places, validated per type in `src/lib/question-schema.ts`:
+
+    | Item type | Key lives in | Rule |
+    |---|---|---|
+    | `single`, `case` | `options` table | exactly 1 correct |
+    | `multi` | `options` table | 2–3 correct |
+    | `graphic` | `options` table + `exhibit_json` chart spec (`kind` ∈ burndown, burnup, network_diagram, control_chart, pareto, tornado, evm_dashboard, histogram, kanban, power_interest_grid) | exactly 1 correct |
+    | `matching` | `exhibit_json` `{kind, left[], right[], answer[{left,right}], rationales{leftId}}` | every left keyed once, every right used once |
+    | `enhanced_matching` | same shape, `kind: "enhanced_matching"` | ≥1 right item unused; each unused one carries `distractor_family` + `rationale` |
+    | `point_and_click` | `exhibit_json` `{kind, base (chart spec or diagram description), regions[{id,label,rect{x,y,w,h} 0–1, is_correct, distractor_family?, rationale}]}` | exactly 1 correct region |
+    | `pull_down_list` | `exhibit_json` `{kind, template "… {{blankId}} …", blanks[{id, choices[{id,text,is_correct,distractor_family?,rationale}]}]}` | each blank exactly 1 correct; every placeholder ↔ blank |
+
+    Exhibit-keyed types must have zero rows in `options` and a non-empty `explanation_md`. In every type, a wrong choice needs a `distractor_family` and a `rationale`; a correct choice needs a `rationale` and no family. The manual entry form only offers the four option-based types; the other four arrive with the generator.
+
+14. **Which brief is canonical.** `prompt.md` and `FABLE_BUILD_PROMPT.md` were byte-identical apart from CRLF line endings; `FABLE_BUILD_PROMPT.md` is kept because `PHASE2_BRIEF.md` refers to it by name. `PHASE2_BRIEF.md` supersedes its §5–§7 and adds §17–§20.

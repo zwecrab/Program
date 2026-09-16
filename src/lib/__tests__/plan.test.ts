@@ -31,9 +31,13 @@ describe("seed data", () => {
     expect(ECO_TASKS.filter((t) => t.domain === "business_environment")).toHaveLength(8);
     expect(new Set(ECO_TASKS.map((t) => t.id)).size).toBe(26);
   });
-  it("task weights sum to the domain weights", () => {
-    const sum = ECO_TASKS.reduce((a, t) => a + taskWeightPct(t.domain), 0);
-    expect(Math.round(sum)).toBe(100);
+  it("each task carries its domain weight verbatim; domains total exactly 100", () => {
+    expect(taskWeightPct("people")).toBe(33);
+    expect(taskWeightPct("process")).toBe(41);
+    expect(taskWeightPct("business_environment")).toBe(26);
+    const perDomain = new Map<string, number>();
+    for (const t of ECO_TASKS) perDomain.set(t.domain, taskWeightPct(t.domain));
+    expect([...perDomain.values()].reduce((a, b) => a + b, 0)).toBe(100);
   });
   it("builds 47 study days from 15 Sep to 31 Oct 2026", () => {
     const days = buildStudyDays();

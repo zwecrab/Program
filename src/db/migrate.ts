@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { resolve } from "node:path";
 import { db } from "./client";
 import { ecoTasks, sessions, settings, studyDays } from "./schema";
-import { BASELINE_SESSION, DEFAULT_SETTINGS, ECO_TASKS, buildStudyDays, taskWeightPct } from "./seed-data";
+import { BASELINE_SESSION, DEFAULT_SETTINGS, DOMAIN_WEIGHTS, ECO_TASKS, buildStudyDays, taskWeightPct } from "./seed-data";
 
 let done: Promise<void> | undefined;
 
@@ -31,6 +31,11 @@ export async function seed() {
         planDay: t.planDay,
       })),
     );
+  }
+
+  // Idempotent repair: weight_pct is the domain weight (hotfix #5). Fixes DBs seeded before that change.
+  for (const domain of Object.keys(DOMAIN_WEIGHTS) as Array<keyof typeof DOMAIN_WEIGHTS>) {
+    await db.update(ecoTasks).set({ weightPct: DOMAIN_WEIGHTS[domain] }).where(eq(ecoTasks.domain, domain));
   }
 
   const existingDays = await db.select({ day: studyDays.day }).from(studyDays);

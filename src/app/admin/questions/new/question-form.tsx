@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { Button, Card, CardTitle, Field, Input, Select, Textarea } from "@/components/ui";
-import { DELIVERY_APPROACHES, DISTRACTOR_FAMILIES, ITEM_TYPES, STYLES, type Domain } from "@/db/schema";
+import { DELIVERY_APPROACHES, DISTRACTOR_FAMILIES, OPTION_BASED_ITEM_TYPES, STYLES, type Domain } from "@/db/schema";
 import { saveManualQuestion, type SaveResult } from "../actions";
 
 interface TaskOpt {
@@ -41,7 +41,8 @@ export function QuestionForm({ tasks }: { tasks: TaskOpt[] }) {
         </Field>
         <Field label="Item type">
           <Select name="item_type" defaultValue="single">
-            {ITEM_TYPES.map((d) => (
+            {/* This form only writes option-based items; the exhibit-keyed types come with the generator. */}
+            {OPTION_BASED_ITEM_TYPES.map((d) => (
               <option key={d}>{d}</option>
             ))}
           </Select>

@@ -9,7 +9,25 @@ export const DOMAINS = ["people", "process", "business_environment"] as const;
 export type Domain = (typeof DOMAINS)[number];
 
 export const DELIVERY_APPROACHES = ["predictive", "adaptive", "hybrid"] as const;
-export const ITEM_TYPES = ["single", "multi", "matching", "ordering", "calculation", "graphic", "case"] as const;
+/**
+ * The eight item types on the 2026 PMP exam. Numeric questions are `single`
+ * or `multi` with `style = "calculation"`; "calculation" is not an item type.
+ * Answer shape per type is defined in src/lib/question-schema.ts.
+ */
+export const ITEM_TYPES = [
+  "single", // multiple-choice, one correct answer
+  "multi", // multiple-response, 2–3 correct
+  "matching", // match items across two lists
+  "enhanced_matching", // matching with right-side entries that match nothing
+  "point_and_click", // click a region of an exhibit
+  "pull_down_list", // one or more in-sentence dropdowns
+  "graphic", // built on a rendered chart or diagram
+  "case", // part of a linked case-study cluster
+] as const;
+export type ItemType = (typeof ITEM_TYPES)[number];
+
+/** Types whose answers live in the `options` table. The other four keep their key in `exhibit_json`. */
+export const OPTION_BASED_ITEM_TYPES = ["single", "multi", "graphic", "case"] as const satisfies readonly ItemType[];
 export const DIFFICULTIES = [1, 2, 3] as const;
 export const STYLES = ["what_should_pm_do", "first", "next", "best", "concept", "calculation"] as const;
 export const QUESTION_STATUSES = ["draft", "qa_pending", "active", "quarantined", "failed", "retired"] as const;
@@ -42,6 +60,7 @@ export const ecoTasks = sqliteTable("eco_tasks", {
   domain: text("domain", { enum: DOMAINS }).notNull(),
   taskNumber: integer("task_number").notNull(),
   title: text("title").notNull(),
+  /** Weight of this task's DOMAIN on the exam (33/41/26) — not divided across tasks. See DECISIONS.md #12. */
   weightPct: real("weight_pct").notNull(),
   planDay: integer("plan_day").notNull(),
   studied: integer("studied", { mode: "boolean" }).notNull().default(false),

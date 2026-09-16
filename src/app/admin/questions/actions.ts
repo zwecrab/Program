@@ -31,13 +31,14 @@ export async function insertQuestion(input: QuestionInput, sourceBatch: string, 
       status,
     })
     .returning({ id: questions.id });
+  if (input.options.length === 0) return q.id; // exhibit-keyed item types carry their key in exhibit_json
   await db.insert(options).values(
     input.options.map((o) => ({
       questionId: q.id,
       label: o.label.toUpperCase(),
       body: o.body,
       isCorrect: o.is_correct,
-      distractorFamily: o.distractor_family,
+      distractorFamily: o.distractor_family ?? null,
       rationale: o.rationale,
     })),
   );
