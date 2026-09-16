@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f7f5;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --muted: #6b6b66;
+  --border: #e4e4df;
+  --primary: #1f4f8f;
+  --primary-fg: #ffffff;
+  --accent: #d97706;
+  --success: #15803d;
+  --danger: #b91c1c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #101114;
+    --foreground: #ececec;
+    --card: #191a1f;
+    --muted: #9a9a94;
+    --border: #2a2b31;
+    --primary: #6fa2e8;
+    --primary-fg: #0b1220;
+    --accent: #f5a524;
+    --success: #4ade80;
+    --danger: #f87171;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-fg: var(--primary-fg);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Myanmar", sans-serif;
+  padding-bottom: env(safe-area-inset-bottom);
+}
